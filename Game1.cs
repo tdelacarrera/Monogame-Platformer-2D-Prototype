@@ -1,13 +1,24 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Engine;
+using Engine.Entity;
+using Engine.Rendering;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Monogame.Entities;
+using Monogame.Managers;
+using Monogame.World;
 
 namespace Monogame
 {
     public class Game1 : Game
     {
+
         private GraphicsDeviceManager graphics;
-        private SpriteBatch spriteBatch;
-        private GameStateManager gameStateManager;
+        private SpriteBatch _spriteBatch;
+        private Camera Camera;
+        private Player player;
+
+        private Level level;
 
         public Game1()
         {
@@ -22,28 +33,54 @@ namespace Monogame
             graphics.PreferredBackBufferWidth = Globals.ScreenW;
             graphics.PreferredBackBufferHeight = Globals.ScreenH;
             graphics.ApplyChanges();
-            gameStateManager = new GameStateManager();
             Globals.GraphicsDevice = graphics.GraphicsDevice;
+
+            level = new Level("../../../Data/Level1/", "textureAtlas");
+            Dictionary<Vector2, int> entities = EntityLoader.LoadEntities("../../../Data/Level1/entities.csv");
+            EntitySpawner.SpawnEntities(entities);
+            level.LoadContent(Content);
+            Camera = new Camera(level.Dimensions);
+            player = new Player(Vector2.Zero, level);
+            GameObjectManager.Add(player);
 
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            gameStateManager.LoadContent(Content);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            foreach (ILoadable loadable in GameObjectManager.Loadables)
+            {
+                loadable.LoadContent(Content);
+            }
         }
 
         protected override void Update(GameTime gameTime)
         {
-            gameStateManager.Update(gameTime);
+            foreach (IUpdatable updatable in GameObjectManager.Updatables)
+            {
+                updatable.Update(gameTime);
+            }
             base.Update(gameTime);
+
+            Globals.Update(gameTime);
+            InputController.Update();
+            player.DetectPickables();
+            Camera.Update(player.Position);
+
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            spriteBatch.GraphicsDevice.Clear(Color.CornflowerBlue);
-            gameStateManager.Draw(spriteBatch);
+              _spriteBatch.GraphicsDevice.Clear(Color.CornflowerBlue);
+            _spriteBatch.Begin(transformMatrix: Camera.TransformMatrix, samplerState:  SamplerState.PointClamp);
+            foreach (IRenderable renderable in GameObjectManager.Renderables)
+            {
+                renderable.Draw(_spriteBatch);
+            }
+            level.Draw(_spriteBatch);
+            _spriteBatch.End();
             base.Draw(gameTime);
         }
     }

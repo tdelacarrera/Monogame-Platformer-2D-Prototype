@@ -1,12 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Monogame.Entities;
-using Engine.Level;
 
 namespace Engine.Entity
 {
@@ -24,6 +18,7 @@ namespace Engine.Entity
                         //TODO: FIX SIZE
                         Coin coin = new Coin(entity.Key * 16);
                         instancedEntities.Add(coin);
+                        GameObjectManager.Add(coin);
                     }
                 }
             }

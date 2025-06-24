@@ -5,8 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Engine.Entity;
 
-//TODO: create Gameobject class
-
 namespace Monogame.Entities
 {
     public class Player : Entity
@@ -114,6 +112,18 @@ namespace Monogame.Entities
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, Position, Color.White);
+        }
+
+        public void DetectPickables()
+        {
+            foreach (Coin pickable in GameObjectManager.Pickables)
+            {
+                if (Bounds.Intersects(pickable.Bounds) && pickable is Coin)
+                {
+                    pickable.Pickup();
+                    break;
+                }
+            }
         }
     }
 }

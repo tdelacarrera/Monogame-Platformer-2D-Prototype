@@ -1,11 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Engine.Rendering;
+using Engine;
 
 
 namespace Monogame
 {
-    public partial class GameStateManager : Engine.Drawing.IDrawable, Engine.IUpdatable
+    public partial class GameStateManager : IRenderable, IUpdatable
     {
         private MenuScene menuScene = new MenuScene();
         private GameScene gameScene = new GameScene();

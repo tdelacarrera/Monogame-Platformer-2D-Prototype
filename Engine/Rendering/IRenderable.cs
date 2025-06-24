@@ -1,8 +1,8 @@
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Engine.Drawing;
+namespace Engine.Rendering;
 
-public interface IDrawable
+public interface IRenderable
 {
     void Draw(SpriteBatch spriteBatch);
 }
