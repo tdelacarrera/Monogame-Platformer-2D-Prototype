@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using Engine.Level;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;

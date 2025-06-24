@@ -1,5 +1,4 @@
-﻿using System;
-using Engine;
+﻿using Engine;
 using Engine.Entity;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -7,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Monogame.Entities
 {
-    public class Coin : Entity, IPickables
+    public class Coin : Entity, IPickable
     {
 
         public Coin(Vector2 position)

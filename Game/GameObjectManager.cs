@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Engine;
 using Engine.Entity;
@@ -10,9 +9,7 @@ public static class GameObjectManager
     public static List<IRenderable> Renderables;
     public static List<IUpdatable> Updatables;
     public static List<ILoadable> Loadables;
-    public static List<IPickables> Pickables;
-    
-    public static List<Entity> objectsToRemove;
+    public static List<IPickable> Pickables;
 
     static GameObjectManager()
     {
@@ -20,7 +17,7 @@ public static class GameObjectManager
         Renderables = new List<IRenderable>();
         Updatables = new List<IUpdatable>();
         Loadables = new List<ILoadable>();
-        Pickables = new List<IPickables>();
+        Pickables = new List<IPickable>();
     }
     public static void Add(GameObject gameObject)
     {
@@ -43,9 +40,9 @@ public static class GameObjectManager
             Loadables.Add(loadable);
         }
 
-        if (gameObject is IPickables)
+        if (gameObject is IPickable)
         {
-            IPickables pickable = (IPickables)gameObject;
+            IPickable pickable = (IPickable)gameObject;
             Pickables.Add(pickable);
         }
     }
@@ -71,9 +68,9 @@ public static class GameObjectManager
             Loadables.Add(loadable);
         }
 
-        if (gameObject is IPickables)
+        if (gameObject is IPickable)
         {
-            IPickables pickable = (IPickables)gameObject;
+            IPickable pickable = (IPickable)gameObject;
             Pickables.Remove(pickable);
         }
         

@@ -37,7 +37,18 @@ namespace Monogame
 
             level = new Level("../../../Data/Level1/", "textureAtlas");
             Dictionary<Vector2, int> entities = EntityLoader.LoadEntities("../../../Data/Level1/entities.csv");
-            EntitySpawner.SpawnEntities(entities);
+            foreach (var entity in entities)
+            {
+                if (entity.Value != -1)
+                {
+                    if (entity.Value == 108)
+                    {
+                        //TODO: FIX SIZE
+                        Coin coin = new Coin(entity.Key * 16);
+                        GameObjectManager.Add(coin);
+                    }
+                }
+            }
             level.LoadContent(Content);
             Camera = new Camera(level.Dimensions);
             player = new Player(Vector2.Zero, level);
@@ -73,7 +84,7 @@ namespace Monogame
 
         protected override void Draw(GameTime gameTime)
         {
-              _spriteBatch.GraphicsDevice.Clear(Color.CornflowerBlue);
+            _spriteBatch.GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin(transformMatrix: Camera.TransformMatrix, samplerState:  SamplerState.PointClamp);
             foreach (IRenderable renderable in GameObjectManager.Renderables)
             {
