@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Monogame
 {
-    public partial class GameStateManager
+    public partial class GameStateManager : Engine.Drawing.IDrawable, Engine.IUpdatable
     {
         private MenuScene menuScene = new MenuScene();
         private GameScene gameScene = new GameScene();

@@ -1,10 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Monogame.Managers
 {
 
-    public class ViewportManager
+    public class Camera
     {
         private float zoom = 2.8f;
         public Matrix TransformMatrix { get; protected set; }
@@ -13,7 +14,7 @@ namespace Monogame.Managers
         private float lerpSpeed = 0.1f;
         private Vector2 Dimensions;
 
-        public ViewportManager(Vector2 dimensions)
+        public Camera(Vector2 dimensions)
         {
             viewport = Globals.GraphicsDevice.Viewport;
             Dimensions = dimensions;
@@ -33,6 +34,11 @@ namespace Monogame.Managers
                 Matrix.CreateScale(zoom) *
                 Matrix.CreateTranslation(new Vector3(viewport.Width / 2, viewport.Height / 2, 0));
 
+        }
+
+        internal void Update(object position)
+        {
+            throw new NotImplementedException();
         }
     }
 }

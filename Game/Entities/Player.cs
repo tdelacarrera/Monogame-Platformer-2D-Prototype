@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Engine.Entity;
+
+//TODO: create Gameobject class
 
 namespace Monogame.Entities
 {
@@ -15,6 +18,8 @@ namespace Monogame.Entities
         private Vector2 velocity;
         private bool onGround;
         private int jumpCount = 0;
+
+
         public Player(Vector2 position, ICollisionProvider collisionProvider)
         {
             Group = "player";
@@ -29,9 +34,9 @@ namespace Monogame.Entities
 
         private void UpdateVelocity()
         {
-            if (InputManager.KeyDown(Keys.A))
+            if (InputController.KeyDown(Keys.A))
                 velocity.X = -SPEED;
-            else if (InputManager.KeyDown(Keys.D))
+            else if (InputController.KeyDown(Keys.D))
                 velocity.X = SPEED;
             else
                 velocity.X = 0;
@@ -40,7 +45,7 @@ namespace Monogame.Entities
             velocity.Y += GRAVITY * Globals.DeltaTime;
 
 
-            if (InputManager.KeyPressed(Keys.W) || InputManager.KeyPressed(Keys.Space))
+            if (InputController.KeyPressed(Keys.W) || InputController.KeyPressed(Keys.Space))
             {
                 if (onGround)
                 {

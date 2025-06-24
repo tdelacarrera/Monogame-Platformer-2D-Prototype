@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+//TODO: REMOVE GLOBALS
+
 namespace Monogame
 {
     public static class Globals

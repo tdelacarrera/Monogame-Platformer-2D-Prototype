@@ -11,7 +11,7 @@ namespace Monogame
 {
     public class GameScene : Scene
     {
-        private ViewportManager viewportManager;
+        private Camera Camera;
         private Level level;
         private EntityManager entityManager;
         private Player player;
@@ -23,10 +23,11 @@ namespace Monogame
             entityManager = new EntityManager("../../../Data/Level1/");
             entityManager.LoadContent(content);
             level.LoadContent(content);
+            //TODO: Manage audio from engine
             //song = content.Load<Song>("Sounds/CaveLoop");
             //MediaPlayer.Play(song);
             //MediaPlayer.IsRepeating = true;
-            viewportManager = new ViewportManager(level.Dimensions);
+            Camera = new Camera(level.Dimensions);
             player = new Player(Vector2.Zero,level);
             player.LoadContent(content);
         }
@@ -34,8 +35,8 @@ namespace Monogame
         public override void Update(GameTime gameTime)
         {
             Globals.Update(gameTime);
-            InputManager.Update();
-            viewportManager.Update(player.Position);
+            InputController.Update();
+            Camera.Update(player.Position);
             player.Update(gameTime);
             entityManager.Update(gameTime, player);
         }
@@ -43,7 +44,7 @@ namespace Monogame
         public override void Draw(SpriteBatch spritebatch)
         {
             spritebatch.GraphicsDevice.Clear(Color.CornflowerBlue);
-            spritebatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: viewportManager.TransformMatrix);
+            spritebatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: Camera.TransformMatrix);
             level.Draw(spritebatch);
             player.Draw(spritebatch);
             entityManager.Draw(spritebatch);

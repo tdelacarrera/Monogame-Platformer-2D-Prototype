@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Monogame
 {
-    public abstract class Scene
+    public abstract class Scene : Engine.Drawing.IDrawable, Engine.IUpdatable
     {
         public abstract void LoadContent(ContentManager Content);
         public abstract void Update(GameTime gameTime);
