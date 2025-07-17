@@ -35,8 +35,8 @@ namespace Monogame
             graphics.ApplyChanges();
             Globals.GraphicsDevice = graphics.GraphicsDevice;
 
-            level = new Level("../../../Data/Level1/", "textureAtlas");
-            Dictionary<Vector2, int> entities = EntityLoader.LoadEntities("../../../Data/Level1/entities.csv");
+            level = new Level("Data/Level1/", "textureAtlas");
+            Dictionary<Vector2, int> entities = EntityLoader.LoadEntities("Data/Level1/entities.csv");
             foreach (var entity in entities)
             {
                 if (entity.Value != -1)
