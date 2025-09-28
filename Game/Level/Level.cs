@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using Engine.Level;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Monogame.World
+namespace Monogame
+
 {
-    public class Level : ICollisionProvider
+    public class Level : ICollisionDetection
     {
         private RenderTarget2D renderTarget;
         private Texture2D textureAtlas;

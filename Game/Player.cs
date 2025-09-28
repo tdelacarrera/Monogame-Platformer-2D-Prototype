@@ -1,69 +1,73 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Engine.Entity;
 
-namespace Monogame.Entities
+namespace Monogame
+
 {
-    public class Player : Entity
+    public class Player : IPlayer
     {
-        private ICollisionProvider collisionProvider;
-        private const int SPEED = 200;
-        private const int GRAVITY = 1100;
-        private const int JUMP_STRENGHT = 340;
-        private Vector2 velocity;
-        private bool onGround;
-        private int jumpCount = 0;
+        public int SPEED { get; set; } = 200;
+        public int GRAVITY { get; set; } = 1100;
+        public int JUMP_STRENGTH { get; set; } = 340;
+        public ICollisionDetection CollisionDetection { get; set; }
+        public Vector2 Velocity { get; set; }
+        public int JumpCount { get; set; }
+        public Texture2D Texture { get; set; }
+        public bool OnGround { get; set; }
+        public string Group { get; set; } = "empty";
+        public Vector2 Position { get; set; }
 
-
-        public Player(Vector2 position, ICollisionProvider collisionProvider)
+        public Player(Vector2 position, ICollisionDetection collisionDetection)
         {
             Group = "player";
             Position = position;
-            this.collisionProvider = collisionProvider;
+            CollisionDetection = collisionDetection;
         }
 
-        public override void LoadContent(ContentManager content)
+        public void LoadContent(ContentManager content)
         {
-            texture = content.Load<Texture2D>("player");
+            Texture = content.Load<Texture2D>("player");
         }
 
         private void UpdateVelocity()
         {
+            Vector2 v = Velocity;
             if (InputController.KeyDown(Keys.A))
-                velocity.X = -SPEED;
+                v.X = -SPEED;
             else if (InputController.KeyDown(Keys.D))
-                velocity.X = SPEED;
+                v.X = SPEED;
             else
-                velocity.X = 0;
+                v.X = 0;
 
-
-            velocity.Y += GRAVITY * Globals.DeltaTime;
-
+            v.Y += GRAVITY * Globals.DeltaTime;
 
             if (InputController.KeyPressed(Keys.W) || InputController.KeyPressed(Keys.Space))
             {
-                if (onGround)
+                if (OnGround)
                 {
-                    velocity.Y = -JUMP_STRENGHT;
-                    jumpCount = 1;
+                    v.Y = -JUMP_STRENGTH;
+                    JumpCount = 1;
                 }
-                else if (jumpCount == 1)
+                else if (JumpCount == 1)
                 {
-                    velocity.Y = -JUMP_STRENGHT;
-                    jumpCount = 2;
+                    v.Y = -JUMP_STRENGTH;
+                    JumpCount = 2;
                 }
             }
+            Velocity = v;
         }
 
         public void UpdatePosition()
         {
-            onGround = false;
-            var newPos = Position + velocity * Globals.DeltaTime;
+            Vector2 v = Velocity;
+            OnGround = false;
+            var newPos = Position + Velocity * Globals.DeltaTime;
             Rectangle newBounds = CalculateBounds(newPos);
-            List<Rectangle> nearbyColliders = collisionProvider.GetNearbyTilesColliders(newBounds);
+            List<Rectangle> nearbyColliders = CollisionDetection.GetNearbyTilesColliders(newBounds);
             foreach (var collider in nearbyColliders)
             {
                 if (newPos.X != Position.X)
@@ -72,7 +76,7 @@ namespace Monogame.Entities
                     if (newBounds.Intersects(collider))
                     {
                         if (newPos.X > Position.X)
-                            newPos.X = collider.Left - texture.Width;
+                            newPos.X = collider.Left - Texture.Width;
                         else
                             newPos.X = collider.Right;
                     }
@@ -80,50 +84,67 @@ namespace Monogame.Entities
                 newBounds = CalculateBounds(new(Position.X, newPos.Y));
                 if (newBounds.Intersects(collider))
                 {
-                    if (velocity.Y > 0)
+                    if (Velocity.Y > 0)
                     {
                         newPos.Y = Position.Y;
-                        onGround = true;
-                        velocity.Y = 0;
-                        jumpCount = 0;
+                        OnGround = true;
+                        v.Y = 0;
+                        JumpCount = 0;
                     }
                     else
                     {
                         newPos.Y = collider.Bottom;
-                        velocity.Y = 0;
+                        v.Y = 0;
 
                     }
                 }
             }
             Position = newPos;
-
+            Velocity = v;
         }
+
         private Rectangle CalculateBounds(Vector2 newPos)
         {
-            return new Rectangle((int)newPos.X, (int)newPos.Y, texture.Width, texture.Height);
+            return new Rectangle((int)newPos.X, (int)newPos.Y, Texture.Width, Texture.Height);
         }
 
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
-            UpdatePosition();
             UpdateVelocity();
+            UpdatePosition();
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, Position, Color.White);
+            spriteBatch.Draw(Texture, Position, Color.White);
+        }
+
+        public void DetectPickables(List<IPickable> pickables)
+        {
+            foreach (IPickable pickable in pickables)
+            {
+                if (GetBounds().Intersects(pickable.GetBounds()) && pickable is Coin)
+                {
+                    pickable.Pickup();
+                }
+            }
+        }
+        public Rectangle GetBounds()
+        {
+            if (Texture == null)
+                return Rectangle.Empty;
+
+            return new Rectangle(
+                (int)Position.X,
+                (int)Position.Y,
+                Texture.Width,
+                Texture.Height
+            );
         }
 
         public void DetectPickables()
         {
-            foreach (Coin pickable in GameObjectManager.Pickables)
-            {
-                if (Bounds.Intersects(pickable.Bounds) && pickable is Coin)
-                {
-                    pickable.Pickup();
-                    break;
-                }
-            }
+            throw new System.NotImplementedException();
         }
     }
 }

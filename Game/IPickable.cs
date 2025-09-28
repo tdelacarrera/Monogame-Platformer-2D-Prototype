@@ -1,7 +1,11 @@
-namespace Engine
+
+namespace Monogame
 {
-    public interface IPickable
+
+    public interface IPickable : IGameEntity
     {
-        void Pickup();
+        public bool IsPicked { get; set; }
+        public void Pickup();
+        public void Remove();
     }
 }

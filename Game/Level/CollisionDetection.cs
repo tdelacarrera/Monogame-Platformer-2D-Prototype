@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
-namespace Engine.Level;
+namespace Monogame;
 
 public class CollisionDetection()
 {
@@ -12,11 +12,6 @@ public class CollisionDetection()
         int rightTile = (int)Math.Ceiling((float)bounds.Right / tileSize) - 1;
         int topTile = (int)Math.Floor((float)bounds.Top / tileSize);
         int bottomTile = (int)Math.Ceiling((float)bounds.Bottom / tileSize) - 1;
-
-        leftTile = MathHelper.Clamp(leftTile, 0, layer.Count - 1);
-        rightTile = MathHelper.Clamp(rightTile, 0, layer.Count - 1);
-        topTile = MathHelper.Clamp(topTile, 0, layer.Count - 1);
-        bottomTile = MathHelper.Clamp(bottomTile, 0, layer.Count - 1);
 
         List<Rectangle> result = new();
 

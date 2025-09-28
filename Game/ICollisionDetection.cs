@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace Monogame
 {
-    public interface ICollisionProvider
+    public interface ICollisionDetection
     {
         List<Rectangle> GetNearbyTilesColliders(Rectangle bounds);
 

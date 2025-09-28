@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Monogame;
 
-namespace Engine.Level;
+namespace Monogame;
+
 public class TilemapTextureLoader()
 {
     public static List<Texture2D> LoadTileTextures(Texture2D textureAtlas, int tileSize)

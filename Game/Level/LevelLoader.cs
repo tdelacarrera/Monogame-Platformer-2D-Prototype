@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
 
-namespace Engine.Level;
+namespace Monogame;
+
 public class LevelLoader()
 {
     public static Dictionary<Vector2, int> LoadLevel(string filepath)
