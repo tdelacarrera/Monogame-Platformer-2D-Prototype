@@ -8,67 +8,58 @@ using Microsoft.Xna.Framework.Input;
 namespace Monogame
 
 {
-    public class Player : IPlayer
+    public class Player
     {
-        public int SPEED { get; set; } = 200;
-        public int GRAVITY { get; set; } = 1100;
-        public int JUMP_STRENGTH { get; set; } = 340;
-        public ICollisionDetection CollisionDetection { get; set; }
-        public Vector2 Velocity { get; set; }
-        public int JumpCount { get; set; }
-        public Texture2D Texture { get; set; }
-        public bool OnGround { get; set; }
-        public string Group { get; set; } = "empty";
-        public Vector2 Position { get; set; }
+        private int Speed { get; set; } = 200;
+        private int Gravity { get; set; } = 1100;
+        private int Jump_strength { get; set; } = 340;
+        private Vector2 Velocity { get; set; }
+        private int JumpCount { get; set; }
+        private Texture2D Texture { get; set; }
+        private bool OnGround { get; set; }
+        public Vector2 Position { get; private set; }
 
-        public Player(Vector2 position, ICollisionDetection collisionDetection)
+        public Player(Vector2 position, Texture2D texture)
         {
-            Group = "player";
             Position = position;
-            CollisionDetection = collisionDetection;
+            Texture = texture;
         }
 
-        public void LoadContent(ContentManager content)
-        {
-            Texture = content.Load<Texture2D>("player");
-        }
-
-        private void UpdateVelocity()
+        public void UpdateVelocity(float deltaTime)
         {
             Vector2 v = Velocity;
             if (InputController.KeyDown(Keys.A))
-                v.X = -SPEED;
+                v.X = -Speed;
             else if (InputController.KeyDown(Keys.D))
-                v.X = SPEED;
+                v.X = Speed;
             else
                 v.X = 0;
 
-            v.Y += GRAVITY * Globals.DeltaTime;
+            v.Y += Gravity * deltaTime;
 
             if (InputController.KeyPressed(Keys.W) || InputController.KeyPressed(Keys.Space))
             {
                 if (OnGround)
                 {
-                    v.Y = -JUMP_STRENGTH;
+                    v.Y = -Jump_strength;
                     JumpCount = 1;
                 }
                 else if (JumpCount == 1)
                 {
-                    v.Y = -JUMP_STRENGTH;
+                    v.Y = -Jump_strength;
                     JumpCount = 2;
                 }
             }
             Velocity = v;
         }
 
-        public void UpdatePosition()
+        public void UpdatePosition(float deltaTime, Level level)
         {
             Vector2 v = Velocity;
             OnGround = false;
-            var newPos = Position + Velocity * Globals.DeltaTime;
+            var newPos = Position + Velocity * deltaTime;
             Rectangle newBounds = CalculateBounds(newPos);
-            List<Rectangle> nearbyColliders = CollisionDetection.GetNearbyTilesColliders(newBounds);
-            foreach (var collider in nearbyColliders)
+            foreach (var collider in level.GetTilesColliders(newBounds))
             {
                 if (newPos.X != Position.X)
                 {
@@ -103,15 +94,9 @@ namespace Monogame
             Velocity = v;
         }
 
-        private Rectangle CalculateBounds(Vector2 newPos)
+        public Rectangle CalculateBounds(Vector2 newPos)
         {
             return new Rectangle((int)newPos.X, (int)newPos.Y, Texture.Width, Texture.Height);
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            UpdateVelocity();
-            UpdatePosition();
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -119,32 +104,14 @@ namespace Monogame
             spriteBatch.Draw(Texture, Position, Color.White);
         }
 
-        public void DetectPickables(List<IPickable> pickables)
-        {
-            foreach (IPickable pickable in pickables)
-            {
-                if (GetBounds().Intersects(pickable.GetBounds()) && pickable is Coin)
-                {
-                    pickable.Pickup();
-                }
-            }
-        }
         public Rectangle GetBounds()
         {
-            if (Texture == null)
-                return Rectangle.Empty;
-
             return new Rectangle(
                 (int)Position.X,
                 (int)Position.Y,
                 Texture.Width,
                 Texture.Height
             );
-        }
-
-        public void DetectPickables()
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

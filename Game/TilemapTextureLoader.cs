@@ -6,7 +6,7 @@ namespace Monogame;
 
 public class TilemapTextureLoader()
 {
-    public static List<Texture2D> LoadTileTextures(Texture2D textureAtlas, int tileSize)
+    public static List<Texture2D> LoadTileTextures(Texture2D textureAtlas, int tileSize, GraphicsDevice graphicsDevice)
     {
         List<Texture2D> tileTextures = new List<Texture2D>();
 
@@ -15,7 +15,7 @@ public class TilemapTextureLoader()
             for (int x = 0; x < textureAtlas.Width / tileSize; x++)
             {
                 Rectangle tileRegion = new Rectangle(x * tileSize, y * tileSize, tileSize, tileSize);
-                Texture2D tileTexture = new Texture2D(Globals.GraphicsDevice, tileSize, tileSize);
+                Texture2D tileTexture = new Texture2D(graphicsDevice, tileSize, tileSize);
                 Color[] tileData = new Color[tileSize * tileSize];
 
                 textureAtlas.GetData(0, tileRegion, tileData, 0, tileData.Length);
@@ -23,7 +23,7 @@ public class TilemapTextureLoader()
                 tileTextures.Add(tileTexture);
             }
         }
-
+        
         return tileTextures;
     }
 

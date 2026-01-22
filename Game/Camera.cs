@@ -3,38 +3,37 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Monogame
 {
-    public class Camera : ICamera
+    public class Camera
     {
-        public float zoom { get; set; } = 2.8f;
+        private float Zoom { get; set; } = 2.8f;
         public Matrix TransformMatrix { get; private set; }
-        public Vector2 position { get; set; }
-        public Viewport viewport { get; set; }
-        public float lerpSpeed { get; set; } = 0.1f;
-        public Vector2 Dimensions { get; set; }
+        private Vector2 Position { get; set; }
+        private Viewport Viewport { get; set; }
+        private float LerpSpeed { get; set; } = 0.1f;
+        private Vector2 Dimensions { get; set; }
 
-        public Camera(Vector2 dimensions)
+        public Camera(Vector2 dimensions, Viewport viewport)
         {
-            viewport = Globals.GraphicsDevice.Viewport;
+            Viewport = viewport;
             Dimensions = dimensions;
         }
 
         public void Update(Vector2 targetPosition)
         {
-            Vector2 p = Vector2.Lerp(position, targetPosition, lerpSpeed);
+            Vector2 p = Vector2.Lerp(Position, targetPosition, LerpSpeed);
 
-            p.X = MathHelper.Clamp(p.X, viewport.Width / (2 * zoom), Dimensions.X - viewport.Width / (2 * zoom));
-            p.Y = MathHelper.Clamp(p.Y, viewport.Height / (2 * zoom), Dimensions.Y - viewport.Height / (2 * zoom));
+            p.X = MathHelper.Clamp(p.X, Viewport.Width / (2 * Zoom), Dimensions.X - Viewport.Width / (2 * Zoom));
+            p.Y = MathHelper.Clamp(p.Y, Viewport.Height / (2 * Zoom), Dimensions.Y - Viewport.Height / (2 * Zoom));
 
-            position = p;
+            Position = p;
         }
         
-
         public void UpdateViewMatrix()
         {
             TransformMatrix =
-                Matrix.CreateTranslation(new Vector3(-position.X, -position.Y, 0)) *
-                Matrix.CreateScale(zoom) *
-                Matrix.CreateTranslation(new Vector3(viewport.Width / 2, viewport.Height / 2, 0));
+                Matrix.CreateTranslation(new Vector3(-Position.X, -Position.Y, 0)) *
+                Matrix.CreateScale(Zoom) *
+                Matrix.CreateTranslation(new Vector3(Viewport.Width / 2, Viewport.Height / 2, 0));
         }
     }
 }

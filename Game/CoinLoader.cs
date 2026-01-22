@@ -4,12 +4,11 @@ using Microsoft.Xna.Framework;
 
 namespace Monogame
 {
-    public class EntityLoader()
+    public class CoinLoader()
     {
 
-        public static Dictionary<Vector2, int> LoadEntities(string filepath)
+        public static Dictionary<Vector2, int> LoadEntities(string filepath, int index)
         {
-
             StreamReader streamReader = new(filepath);
             Dictionary<Vector2, int> result = new();
 
@@ -23,7 +22,7 @@ namespace Monogame
                 {
                     if (int.TryParse(tilemap[x], out int value))
                     {
-                        if (value > -1)
+                        if (value == index)
                         {
                             result[new Vector2(x, y)] = value;
                         }

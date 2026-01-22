@@ -6,8 +6,6 @@ namespace Monogame
     {
         private static KeyboardState _lastKeyboard;
         private static KeyboardState _currentKeyboard;
-        public static bool Clicked { get; private set; }
-        public static bool RightClicked { get; private set; }
 
         public static bool KeyPressed(Keys key)
         {

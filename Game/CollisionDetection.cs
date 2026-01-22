@@ -6,7 +6,7 @@ namespace Monogame;
 
 public class CollisionDetection()
 {
-    public static List<Rectangle> GetNearbyTilesColliders(Rectangle bounds, Dictionary<Vector2, int> layer, int tileSize)
+    public List<Rectangle> GetTilesColliders(Rectangle bounds, Dictionary<Vector2, int> layer, int tileSize)
     {
         int leftTile = (int)Math.Floor((float)bounds.Left / tileSize);
         int rightTile = (int)Math.Ceiling((float)bounds.Right / tileSize) - 1;
@@ -22,7 +22,6 @@ public class CollisionDetection()
                 Vector2 position = new Vector2(x, y);
                 if (layer.ContainsKey(position) && layer[position] > -1)
                 {
-
                     result.Add(new Rectangle(x * tileSize, y * tileSize, tileSize, tileSize));
                 }
             }

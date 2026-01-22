@@ -4,25 +4,16 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Monogame
 {
-    public class Coin : IPickable
+    public class Coin
     {
-        public Texture2D Texture { get; set; }
-        public string Group { get; set; }
-        public Vector2 Position { get; set; }
+        private Texture2D Texture { get; set; }
+        private Vector2 Position { get; set; }
         public bool IsPicked { get; set; } = false;
 
-        public Coin(Vector2 position)
+        public Coin(Vector2 position, Texture2D texture)
         {
             Position = position;
-        }
-        public void LoadContent(ContentManager content)
-        {
-            Texture = content.Load<Texture2D>("coin");
-            Group = "coin";
-        }
-
-        public void Update(GameTime gameTime)
-        {
+            Texture = texture;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -30,15 +21,8 @@ namespace Monogame
             spriteBatch.Draw(Texture, Position, Color.White);
         }
 
-        public void Pickup()
-        {
-            IsPicked = true;
-        }
         public Rectangle GetBounds()
         {
-            if (Texture == null)
-                return Rectangle.Empty;
-
             return new Rectangle(
                 (int)Position.X,
                 (int)Position.Y,
